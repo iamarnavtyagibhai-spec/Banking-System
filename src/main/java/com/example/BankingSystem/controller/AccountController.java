@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.BankingSystem.dto.AccountResponse;
 import com.example.BankingSystem.dto.CreateAccountRequest;
-import com.example.BankingSystem.dto.DepositRequest;
 import com.example.BankingSystem.dto.TransactionHistoryResponse;
 import com.example.BankingSystem.dto.TransferRequest;
 import com.example.BankingSystem.model.Account;

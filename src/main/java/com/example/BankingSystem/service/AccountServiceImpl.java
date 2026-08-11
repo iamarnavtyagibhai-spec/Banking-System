@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.BankingSystem.dto.AccountResponse;
-import com.example.BankingSystem.dto.DepositRequest;
 import com.example.BankingSystem.dto.TransactionHistoryResponse;
 import com.example.BankingSystem.dto.TransferRequest;
 import com.example.BankingSystem.exception.InsufficientBalanceException;

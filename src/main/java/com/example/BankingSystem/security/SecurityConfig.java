@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 @Configuration
 public class SecurityConfig {
     @Autowired
@@ -61,5 +62,8 @@ public AuthenticationManager authenticationManager(
 
     return configuration.getAuthenticationManager();
 }
-
+@Bean
+public RestTemplate restTemplate() {
+    return new RestTemplate();
+}
 }

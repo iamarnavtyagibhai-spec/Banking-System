@@ -18,6 +18,12 @@ public class EmailService {
     @Value("${brevo.api.key}")
     private String apiKey;
 
+    @Value("${brevo.sender.email:iamarnavtyagibhai@11798839.brevosend.com}")
+    private String senderEmail;
+
+    @Value("${brevo.sender.name:Banking System}")
+    private String senderName;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -30,8 +36,8 @@ public class EmailService {
         headers.set("api-key", apiKey);
 
         Map<String, Object> sender = Map.of(
-                "name", "Banking System",
-                "email", "iamarnavtyagibhai@gmail.com"
+                "name", senderName,
+                "email", senderEmail
         );
 
         Map<String, Object> receiver = Map.of(

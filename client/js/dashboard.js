@@ -186,9 +186,24 @@ async function handleTransferSubmit(event) {
       amount
     });
 
-    showToast(response || 'Transfer completed successfully! 🎉', 'success');
     closeModal('transfer-modal');
     document.getElementById('transfer-form').reset();
+
+    // Populate Receipt Data
+    const receiptAmt = document.getElementById('receipt-amount');
+    if (receiptAmt) receiptAmt.innerText = `₹ ${formatCurrency(amount)}`;
+
+    const receiptAcc = document.getElementById('receipt-account');
+    if (receiptAcc) receiptAcc.innerText = receiverAccountNumber;
+
+    const receiptTime = document.getElementById('receipt-time');
+    if (receiptTime) {
+      const now = new Date();
+      receiptTime.innerText = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) + ', ' + now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    }
+
+    // Open Animated Checkmark Receipt Modal
+    openModal('transfer-success-modal');
 
     // Auto-refresh Balance and Passbook
     await refreshAccountDetails();

@@ -1,25 +1,26 @@
 /* ==========================================================================
-   NOVABANK - ULTRA-LIGHT, AIRY & MINIMALIST FINTECH DESIGN SYSTEM
+   NOVABANK - WARM PEACH & CORAL LUXURY LIGHT DESIGN SYSTEM
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Surfaces & Pure Light Theme */
-  --bg-page: #FAFAFB;
+  /* Warm Peach & Cream Backgrounds */
+  --bg-page: #FFF8F5;
   --bg-card: #FFFFFF;
-  --bg-surface: #F4F6F8;
-  --bg-subtle: #F8FAFC;
+  --bg-surface: #FFF1EB;
+  --bg-subtle: #FFFAF8;
   --bg-input: #FFFFFF;
 
-  /* Primary Brand (Vibrant Clean Sky-Blue) */
-  --primary: #3B82F6;
-  --primary-hover: #2563EB;
-  --primary-subtle: #EFF6FF;
-  --primary-border: #DBEAFE;
-  --primary-focus-ring: rgba(59, 130, 246, 0.18);
+  /* Brand Accents - Luxury Coral Peach */
+  --primary: #FF6B4A;
+  --primary-hover: #E85535;
+  --primary-subtle: #FFF0EB;
+  --primary-border: #FFD4C4;
+  --primary-focus-ring: rgba(255, 107, 74, 0.22);
+  --primary-gradient: linear-gradient(135deg, #FF7E5F 0%, #FEB47B 100%);
 
-  /* Soft Pastel Status Colors */
+  /* Functional Status Colors */
   --emerald: #10B981;
   --emerald-hover: #059669;
   --emerald-subtle: #ECFDF5;
@@ -34,25 +35,25 @@
   --amber-subtle: #FFFBEB;
   --amber-border: #FEF3C7;
 
-  /* Refined Soft Slate Typography */
-  --text-title: #0F172A;
+  /* Typography Colors */
+  --text-title: #1E293B;
   --text-main: #334155;
   --text-muted: #64748B;
   --text-dim: #94A3B8;
   --text-white: #FFFFFF;
 
-  /* Ultra-Light Minimalist Borders */
-  --border: #E5E7EB;
-  --border-light: #F3F4F6;
-  --border-subtle: #E2E8F0;
-  --border-focus: #3B82F6;
+  /* Peach Whisper Borders */
+  --border: #FFE4D6;
+  --border-light: #FFF0EA;
+  --border-subtle: #FED7C3;
+  --border-focus: #FF6B4A;
 
-  /* Whisper-Soft Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
-  --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 16px 36px -6px rgba(0, 0, 0, 0.06), 0 6px 16px -2px rgba(0, 0, 0, 0.03);
-  --shadow-modal: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+  /* Soft Ambient Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(255, 107, 74, 0.04);
+  --shadow-sm: 0 2px 4px 0 rgba(255, 107, 74, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 8px 24px -4px rgba(255, 107, 74, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 16px 36px -6px rgba(255, 107, 74, 0.12), 0 6px 16px -2px rgba(0, 0, 0, 0.03);
+  --shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
 
   /* Border Radii */
   --radius-sm: 8px;
@@ -96,8 +97,8 @@ body {
   padding: 0.85rem 2rem;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-light);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
 }
 
 .brand {
@@ -168,7 +169,7 @@ body {
   gap: 0.5rem;
   padding: 0.35rem 0.85rem;
   background: var(--bg-surface);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-full);
   font-size: 0.85rem;
   font-weight: 600;
@@ -178,9 +179,8 @@ body {
 .user-avatar {
   width: 24px;
   height: 24px;
-  background: var(--primary-subtle);
-  color: var(--primary);
-  border: 1px solid var(--primary-border);
+  background: var(--primary);
+  color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -189,7 +189,7 @@ body {
   font-weight: 800;
 }
 
-/* ---------------- Main Container ---------------- */
+/* ---------------- Container ---------------- */
 .container {
   width: 100%;
   max-width: 1160px;
@@ -221,12 +221,12 @@ body {
 .btn-primary {
   background: var(--primary);
   color: white;
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 4px 14px rgba(255, 107, 74, 0.35);
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 6px 18px rgba(255, 107, 74, 0.45);
 }
 
 .btn-emerald {
@@ -268,7 +268,7 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* ---------------- Auth Views (Ultra-Light Floating Card) ---------------- */
+/* ---------------- Auth Views ---------------- */
 .auth-wrapper {
   min-height: calc(100vh - 120px);
   display: flex;
@@ -403,7 +403,7 @@ body {
 
 .stat-card {
   background: #FFFFFF;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.25rem 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -438,9 +438,9 @@ body {
   font-size: 1.25rem;
 }
 
-.stat-icon.blue { background: var(--primary-subtle); color: var(--primary); border: 1px solid var(--primary-border); }
+.stat-icon.peach { background: var(--primary-subtle); color: var(--primary); border: 1px solid var(--primary-border); }
 .stat-icon.green { background: var(--emerald-subtle); color: var(--emerald); border: 1px solid var(--emerald-border); }
-.stat-icon.purple { background: #F3E8FF; color: #9333EA; border: 1px solid #E9D5FF; }
+.stat-icon.purple { background: #FFF0F5; color: #E11D48; border: 1px solid #FFE4E6; }
 
 /* ---------------- Main Dashboard Grid ---------------- */
 .dashboard-main-grid {
@@ -450,7 +450,7 @@ body {
   align-items: start;
 }
 
-/* ---------------- FROSTED LIGHT PLATINUM CARD ---------------- */
+/* ---------------- SUNSET PEACH VIRTUAL CARD ---------------- */
 .card-section {
   display: flex;
   flex-direction: column;
@@ -463,13 +463,12 @@ body {
   aspect-ratio: 1.586;
   border-radius: var(--radius-lg);
   padding: 1.5rem;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #EEF2F6 100%);
-  border: 1px solid rgba(203, 213, 225, 0.8);
-  color: var(--text-title);
+  background: linear-gradient(135deg, #FF8A65 0%, #FF6E40 50%, #FF5722 100%);
+  color: #FFFFFF;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 14px 30px -6px rgba(255, 87, 34, 0.4), 0 4px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -480,7 +479,7 @@ body {
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -495,7 +494,8 @@ body {
   font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: var(--text-title);
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .card-emv {
@@ -507,9 +507,9 @@ body {
 .emv-chip {
   width: 32px;
   height: 24px;
-  background: linear-gradient(135deg, #FDE68A 0%, #D97706 100%);
+  background: linear-gradient(135deg, #FFF 0%, #FFE082 50%, #FFB300 100%);
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .card-balance-block {
@@ -519,7 +519,7 @@ body {
 .card-balance-sub {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: flex;
@@ -530,9 +530,10 @@ body {
 .card-balance-num {
   font-size: 1.85rem;
   font-weight: 800;
-  color: var(--text-title);
+  color: #FFFFFF;
   letter-spacing: -0.02em;
   margin-top: 0.1rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .card-row-bottom {
@@ -547,13 +548,13 @@ body {
   letter-spacing: 2px;
   font-weight: 700;
   font-family: monospace;
-  color: var(--text-title);
+  color: #FFFFFF;
 }
 
 .copy-btn {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #FFFFFF;
   padding: 0.2rem 0.45rem;
   border-radius: 4px;
   font-size: 0.7rem;
@@ -563,8 +564,7 @@ body {
 }
 
 .copy-btn:hover {
-  background: var(--primary-subtle);
-  border-color: var(--primary-border);
+  background: #FFFFFF;
   color: var(--primary);
 }
 
@@ -572,9 +572,9 @@ body {
   font-size: 0.65rem;
   font-weight: 700;
   padding: 0.2rem 0.55rem;
-  background: var(--emerald-subtle);
-  border: 1px solid var(--emerald-border);
-  color: var(--emerald);
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #FFFFFF;
   border-radius: var(--radius-full);
 }
 
@@ -587,7 +587,7 @@ body {
 
 .action-tile {
   background: #FFFFFF;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 0.9rem;
   display: flex;
@@ -620,7 +620,7 @@ body {
 /* ---------------- Content Box & Transaction History ---------------- */
 .content-box {
   background: #FFFFFF;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
@@ -631,7 +631,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
 }
 
@@ -646,7 +646,7 @@ body {
   background: var(--bg-surface);
   padding: 0.2rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
 }
 
 .filter-btn {
@@ -663,7 +663,8 @@ body {
 
 .filter-btn.active {
   background: #FFFFFF;
-  color: var(--text-title);
+  color: var(--primary);
+  font-weight: 700;
   box-shadow: var(--shadow-xs);
 }
 
@@ -681,14 +682,14 @@ body {
   align-items: center;
   padding: 0.85rem 1rem;
   background: #FFFFFF;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   transition: background-color 0.15s, border-color 0.15s;
 }
 
 .transaction-row:hover {
   background: var(--bg-subtle);
-  border-color: var(--border);
+  border-color: var(--primary-border);
 }
 
 .t-left {
@@ -760,7 +761,7 @@ body {
 .chip {
   padding: 0.3rem 0.65rem;
   background: var(--bg-surface);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
   font-weight: 600;
@@ -836,6 +837,114 @@ body {
   color: var(--text-title);
 }
 
+/* ==========================================================================
+   ANIMATED SUCCESS TICK / CHECKMARK STYLES
+   ========================================================================== */
+.success-checkmark {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.check-icon {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border-radius: 50%;
+  box-sizing: content-box;
+  border: 4px solid var(--emerald);
+  animation: scale-up 0.3s ease-in-out;
+}
+
+.check-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--emerald-subtle);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.icon-line {
+  height: 5px;
+  background-color: var(--emerald);
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+}
+
+.icon-line.line-tip {
+  top: 42px;
+  left: 18px;
+  width: 22px;
+  transform: rotate(45deg);
+  animation: icon-line-tip 0.4s 0.2s forwards;
+}
+
+.icon-line.line-long {
+  top: 36px;
+  right: 14px;
+  width: 38px;
+  transform: rotate(-45deg);
+  animation: icon-line-long 0.4s 0.3s forwards;
+}
+
+@keyframes scale-up {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes icon-line-tip {
+  0% { width: 0; left: 1px; top: 19px; }
+  54% { width: 0; left: 1px; top: 19px; }
+  70% { width: 35px; left: -8px; top: 37px; }
+  84% { width: 17px; left: 21px; top: 48px; }
+  100% { width: 22px; left: 18px; top: 42px; }
+}
+
+@keyframes icon-line-long {
+  0% { width: 0; right: 46px; top: 54px; }
+  65% { width: 0; right: 46px; top: 54px; }
+  84% { width: 45px; right: 0px; top: 30px; }
+  100% { width: 38px; right: 14px; top: 36px; }
+}
+
+/* ---------------- Receipt Card ---------------- */
+.receipt-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 0.88rem;
+}
+
+.receipt-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.receipt-row span {
+  color: var(--text-muted);
+}
+
+.receipt-row strong {
+  color: var(--text-title);
+}
+
 /* ---------------- Toast ---------------- */
 .toast-container {
   position: fixed;
@@ -855,7 +964,7 @@ body {
   padding: 0.85rem 1.15rem;
   border-radius: var(--radius-md);
   background: #FFFFFF;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-lg);
   display: flex;
   align-items: center;
@@ -876,7 +985,7 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ---------------- 100% Fluid Mobile Responsiveness ---------------- */
+/* ---------------- Fluid Responsiveness ---------------- */
 @media (max-width: 980px) {
   .dashboard-main-grid {
     grid-template-columns: 1fr;

@@ -138,7 +138,7 @@
             <span>Available Balance</span>
             <h3 id="stat-balance">₹ 0.00</h3>
           </div>
-          <div class="stat-icon blue">💳</div>
+          <div class="stat-icon peach">💳</div>
         </div>
 
         <div class="stat-card">
@@ -424,6 +424,47 @@
       </div>
       <button type="button" class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="saveApiBaseUrl()">
         Save Settings
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 8: TRANSFER SUCCESS RECEIPT WITH ANIMATED TICK -->
+  <div class="modal-overlay" id="transfer-success-modal">
+    <div class="modal-box" style="text-align: center;">
+      <!-- Animated SVG Checkmark / Tick -->
+      <div class="success-checkmark">
+        <div class="check-icon">
+          <span class="icon-line line-tip"></span>
+          <span class="icon-line line-long"></span>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-title); margin-top: 1rem;">Transfer Successful!</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+        Your funds have been transferred successfully.
+      </p>
+
+      <div class="receipt-card">
+        <div class="receipt-row">
+          <span>Amount Sent</span>
+          <strong id="receipt-amount" style="color: var(--primary); font-size: 1.25rem;">₹ 0.00</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Recipient Account</span>
+          <strong id="receipt-account">ACC000000</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Date & Time</span>
+          <span id="receipt-time" style="font-weight: 600; color: var(--text-title);">Just now</span>
+        </div>
+        <div class="receipt-row">
+          <span>Status</span>
+          <span class="card-type-tag">COMPLETED ✓</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem; padding: 0.8rem;" onclick="closeModal('transfer-success-modal')">
+        Done
       </button>
     </div>
   </div>

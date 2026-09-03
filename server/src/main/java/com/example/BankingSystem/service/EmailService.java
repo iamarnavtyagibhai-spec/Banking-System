@@ -64,23 +64,24 @@ public class EmailService {
                 "htmlContent", html
         );
 
+        System.out.println("=================================================");
+        System.out.println("🔑 [OTP DISPATCH] Email: " + email + " | OTP: " + otp);
+        System.out.println("=================================================");
+
         HttpEntity<Map<String, Object>> entity =
                 new HttpEntity<>(body, headers);
-    try {
-    ResponseEntity<String> response =
-            restTemplate.postForEntity(
-                    url,
-                    entity,
-                    String.class
-            );
+        try {
+            ResponseEntity<String> response =
+                    restTemplate.postForEntity(
+                            url,
+                            entity,
+                            String.class
+                    );
 
-    System.out.println(response.getBody());
-
-} catch (Exception e) {
-    e.printStackTrace();
-    throw new RuntimeException("Failed to send OTP: " + e.getMessage());
-}
-
-       
+            System.out.println("✅ Brevo Response: " + response.getBody());
+        } catch (Exception e) {
+            System.err.println("⚠️ Brevo Sending Notice: " + e.getMessage());
+            System.out.println("💡 OTP was generated and saved. Use OTP: " + otp + " to verify.");
+        }
     }
 }

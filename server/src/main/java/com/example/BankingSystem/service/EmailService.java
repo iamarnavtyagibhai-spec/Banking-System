@@ -31,7 +31,7 @@ public class EmailService {
 
         Map<String, Object> sender = Map.of(
                 "name", "Banking System",
-                "email", "arnavtyagi96@gmail.com"
+                "email", "iamarnavtyagibhai@gmail.com"
         );
 
         Map<String, Object> receiver = Map.of(
@@ -71,7 +71,8 @@ public class EmailService {
     System.out.println(response.getBody());
 
 } catch (Exception e) {
-    throw new RuntimeException("Failed to send OTP");
+    e.printStackTrace();
+    throw new RuntimeException("Failed to send OTP: " + e.getMessage());
 }
 
        

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------
+  # Spring Boot Banking System Application
+  # ----------------------------------------------------
+  banking-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: banking_system_backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Cloud Neon PostgreSQL Configuration
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL:-jdbc:postgresql://localhost:5432/neondb}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-postgres}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD:-postgres}
+      
+      # JWT Authentication Secrets
+      - JWT_SECRET=${JWT_SECRET:-YOUR_JWT_SECRET_KEY_MIN_32_CHARS_LONG}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
+      
+      # Brevo (Sendinblue) Transactional Email API Key
+      - BREVO_API_KEY=${BREVO_API_KEY:-YOUR_BREVO_API_KEY}
+    restart: unless-stopped

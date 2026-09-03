@@ -12,8 +12,6 @@ public class ResetPasswordRequest {
     @Email(message = "Enter a valid email")
     private String email;
 
-    @NotBlank(message = "OTP is required")
-    private String otp;
 
     @NotBlank(message = "New password is required")
     @Pattern(

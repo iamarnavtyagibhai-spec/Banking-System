@@ -44,18 +44,13 @@ public class SecurityConfig {
         );
     return http.build();
     }
-@Bean
-public AuthenticationProvider authenticationProvider() {
-
-    DaoAuthenticationProvider provider =
-            new DaoAuthenticationProvider(customUserDetailsService);
-
-    provider.setPasswordEncoder(passwordencoder());
-
-    return provider;
-
-
-}
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(customUserDetailsService);
+        provider.setPasswordEncoder(passwordencoder());
+        return provider;
+    }
 @Bean
 public AuthenticationManager authenticationManager(
         AuthenticationConfiguration configuration) throws Exception {

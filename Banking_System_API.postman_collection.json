@@ -1,0 +1,381 @@
+{
+	"info": {
+		"_postman_id": "8f3b20e5-79a4-4a21-9a71-6c2e8c2518e1",
+		"name": "Banking System API (Live Render)",
+		"description": "Complete Postman API Collection for Banking System application live on Render.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://banking-system-8kev.onrender.com",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication & Onboarding",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"health"
+							]
+						},
+						"description": "Check if API server is running."
+					},
+					"response": []
+				},
+				{
+					"name": "1. Signup (Sends OTP)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Arnav\",\n  \"lastName\": \"Tyagi\",\n  \"email\": \"arnavtyagi96@gmail.com\",\n  \"password\": \"Banking@1234\",\n  \"phoneNumber\": \"9876543210\",\n  \"dateOfBirth\": \"2000-01-15\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "Creates a pending user and dispatches a 6-digit OTP to the email address."
+					},
+					"response": []
+				},
+				{
+					"name": "2. Verify OTP (Creates Active Account)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"arnavtyagi96@gmail.com\",\n  \"otp\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/verify-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"verify-otp"
+							]
+						},
+						"description": "Verifies the email OTP, persists active User record, and creates a Savings Account."
+					},
+					"response": []
+				},
+				{
+					"name": "3. Resend OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"arnavtyagi96@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/resend-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"resend-otp"
+							]
+						},
+						"description": "Generates and sends a new OTP."
+					},
+					"response": []
+				},
+				{
+					"name": "4. Login (Auto-saves JWT Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var token = pm.response.text();",
+									"    pm.collectionVariables.set(\"token\", token);",
+									"    console.log(\"JWT Token auto-saved to collection variable 'token'\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"arnavtyagi96@gmail.com\",\n  \"password\": \"Banking@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticates user credentials and returns a Bearer JWT token."
+					},
+					"response": []
+				},
+				{
+					"name": "5. Forgot Password (Request OTP)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"arnavtyagi96@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"forgot-password"
+							]
+						},
+						"description": "Sends password reset OTP."
+					},
+					"response": []
+				},
+				{
+					"name": "6. Verify Forgot Password OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"arnavtyagi96@gmail.com\",\n  \"otp\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/verify-forgot-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"verify-forgot-otp"
+							]
+						},
+						"description": "Verifies forgot password OTP."
+					},
+					"response": []
+				},
+				{
+					"name": "7. Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"arnavtyagi96@gmail.com\",\n  \"newPassword\": \"NewBanking@5678\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						},
+						"description": "Updates account password."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. User Account Operations",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"item": [
+				{
+					"name": "Get My Account Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/account/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"me"
+							]
+						},
+						"description": "Returns current authenticated user's account details."
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Money",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"receiverAccountNumber\": \"ACC123456789\",\n  \"amount\": 500.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/account/transfer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"transfer"
+							]
+						},
+						"description": "Transfers funds from user account to recipient account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/account/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"history"
+							]
+						},
+						"description": "Returns complete transaction statement list for user."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Admin Operations",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"item": [
+				{
+					"name": "Admin Deposit Money",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"accountNumber\": \"ACC123456789\",\n  \"amount\": 5000.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/deposit",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"deposit"
+							]
+						},
+						"description": "Admin endpoint to deposit funds into any account."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

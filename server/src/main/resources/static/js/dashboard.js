@@ -12,8 +12,16 @@ let currentTxFilter = 'ALL';
  */
 async function loadDashboard() {
   const user = API_CONFIG.getUser();
-  document.getElementById('user-email-display').innerText = user.email;
-  document.getElementById('card-holder-name').innerText = user.email.split('@')[0];
+  const email = user.email || 'user@novabank.com';
+  
+  const userEmailDisplay = document.getElementById('user-email-display');
+  if (userEmailDisplay) userEmailDisplay.innerText = email;
+
+  const cardHolder = document.getElementById('card-holder-name');
+  if (cardHolder) cardHolder.innerText = email.split('@')[0];
+
+  const avatarInitial = document.getElementById('user-avatar-initial');
+  if (avatarInitial) avatarInitial.innerText = (email[0] || 'U').toUpperCase();
 
   try {
     await Promise.all([
@@ -33,11 +41,14 @@ async function refreshAccountDetails() {
     const data = await BankAPI.getMyAccount();
     currentAccountData = data;
 
-    // Update Virtual Card & Balance UI
+    // Update Virtual Card & Stat Cards
     updateBalanceDisplay(data.balance);
-    document.getElementById('card-account-number').innerText = formatAccountNumber(data.accountNumber);
-    document.getElementById('card-account-status').innerText = data.accountStatus || 'ACTIVE';
-    document.getElementById('card-account-type').innerText = (data.accountType || 'SAVINGS') + ' ACCOUNT';
+    
+    const accNumEl = document.getElementById('card-account-number');
+    if (accNumEl) accNumEl.innerText = formatAccountNumber(data.accountNumber);
+
+    const accStatusEl = document.getElementById('card-account-status');
+    if (accStatusEl) accStatusEl.innerText = (data.accountStatus || 'ACTIVE') + ' SAVINGS';
   } catch (error) {
     console.error('Account details error:', error);
     throw error;
@@ -45,7 +56,7 @@ async function refreshAccountDetails() {
 }
 
 /**
- * Refresh Transaction History
+ * Refresh Transaction History & Stats
  */
 async function refreshTransactionHistory() {
   const listContainer = document.getElementById('transaction-list');
@@ -57,6 +68,26 @@ async function refreshTransactionHistory() {
 
     const data = await BankAPI.getHistory();
     allTransactions = Array.isArray(data) ? data : [];
+
+    // Calculate Summary Stats
+    let totalReceived = 0;
+    let totalSent = 0;
+
+    allTransactions.forEach(tx => {
+      const amt = Number(tx.amount) || 0;
+      if (tx.direction === 'RECEIVE') {
+        totalReceived += amt;
+      } else if (tx.direction === 'SEND') {
+        totalSent += amt;
+      }
+    });
+
+    const statReceived = document.getElementById('stat-received');
+    if (statReceived) statReceived.innerText = `+₹ ${formatCurrency(totalReceived)}`;
+
+    const statSent = document.getElementById('stat-sent');
+    if (statSent) statSent.innerText = `-₹ ${formatCurrency(totalSent)}`;
+
     renderTransactions();
   } catch (error) {
     listContainer.innerHTML = `
@@ -88,10 +119,9 @@ function renderTransactions() {
 
   if (filtered.length === 0) {
     listContainer.innerHTML = `
-      <div style="text-align: center; padding: 3rem 1rem; color: var(--text-dim);">
-        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📄</div>
-        <p style="font-size: 1rem; color: var(--text-muted);">No transactions found</p>
-        <small>Money transfers and deposits will appear here</small>
+      <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
+        <p style="font-weight: 600; font-size: 0.95rem;">No transactions found</p>
+        <small style="color: var(--text-dim);">Transfers and deposits will appear here</small>
       </div>`;
     return;
   }
@@ -106,17 +136,17 @@ function renderTransactions() {
     const dateFormatted = formatDateTime(tx.createdAt);
 
     return `
-      <div class="transaction-item">
-        <div class="tx-left">
-          <div class="tx-icon ${iconClass}">${icon}</div>
-          <div class="tx-details">
+      <div class="transaction-row">
+        <div class="t-left">
+          <div class="t-icon ${iconClass}">${icon}</div>
+          <div class="t-info">
             <h4>${title}</h4>
             <p>${dateFormatted}</p>
           </div>
         </div>
-        <div class="tx-right">
-          <div class="tx-amount ${amountClass}">${sign}₹${formatCurrency(tx.amount)}</div>
-          <span class="tx-badge">${tx.status || 'SUCCESS'}</span>
+        <div class="t-right">
+          <div class="t-amount ${amountClass}">${sign}₹${formatCurrency(tx.amount)}</div>
+          <span class="t-status">${tx.status || 'COMPLETED'}</span>
         </div>
       </div>
     `;
@@ -149,7 +179,7 @@ async function handleTransferSubmit(event) {
 
   try {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Processing Transfer... ⏳';
+    submitBtn.innerHTML = 'Sending... ⏳';
 
     const response = await BankAPI.transfer({
       receiverAccountNumber,
@@ -158,8 +188,6 @@ async function handleTransferSubmit(event) {
 
     showToast(response || 'Transfer completed successfully! 🎉', 'success');
     closeModal('transfer-modal');
-
-    // Reset Form
     document.getElementById('transfer-form').reset();
 
     // Auto-refresh Balance and Passbook
@@ -169,7 +197,7 @@ async function handleTransferSubmit(event) {
     showToast(error.message || 'Transfer failed', 'error');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.innerHTML = 'Confirm & Transfer Money';
+    submitBtn.innerHTML = 'Confirm & Send';
   }
 }
 
@@ -185,7 +213,7 @@ function setTransferChipAmount(val) {
 
 function filterTransactions(type, button) {
   currentTxFilter = type;
-  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   if (button) button.classList.add('active');
   renderTransactions();
 }
@@ -197,16 +225,22 @@ function toggleBalanceVisibility() {
 
   if (isBalanceHidden) {
     balanceEl.innerText = '₹ ••••••••';
-    eyeBtn.innerText = '👁️';
+    if (eyeBtn) eyeBtn.innerText = '👁️';
   } else {
     balanceEl.innerText = `₹ ${formatCurrency(currentAccountData?.balance || 0)}`;
-    eyeBtn.innerText = '🙈';
+    if (eyeBtn) eyeBtn.innerText = '🙈';
   }
 }
 
 function updateBalanceDisplay(amount) {
   const balanceEl = document.getElementById('card-balance-val');
-  if (!isBalanceHidden) {
+  const statBal = document.getElementById('stat-balance');
+  
+  if (statBal) {
+    statBal.innerText = `₹ ${formatCurrency(amount || 0)}`;
+  }
+  
+  if (!isBalanceHidden && balanceEl) {
     balanceEl.innerText = `₹ ${formatCurrency(amount || 0)}`;
   }
 }
@@ -214,7 +248,7 @@ function updateBalanceDisplay(amount) {
 function copyAccountNumber() {
   if (!currentAccountData?.accountNumber) return;
   navigator.clipboard.writeText(currentAccountData.accountNumber);
-  showToast(`Copied Account Number: ${currentAccountData.accountNumber}`, 'info');
+  showToast(`Copied: ${currentAccountData.accountNumber}`, 'info');
 }
 
 function exportStatementCSV() {
@@ -235,7 +269,7 @@ function exportStatementCSV() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  showToast('Statement downloaded as CSV!', 'success');
+  showToast('Statement exported to CSV', 'success');
 }
 
 function formatCurrency(amount) {

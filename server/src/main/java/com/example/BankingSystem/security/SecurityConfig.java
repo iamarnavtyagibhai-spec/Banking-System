@@ -31,10 +31,13 @@ public class SecurityConfig {
          http 
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf-> csrf.disable())
-                .authorizeHttpRequests(auth->auth.requestMatchers("/", "/index.html", "/css/**", "/js/**", "/favicon.ico", "/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                .requestMatchers("/account/**").hasAuthority("USER")
-                .anyRequest().authenticated())
+                .authorizeHttpRequests(auth->auth
+                    .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.FORWARD, jakarta.servlet.DispatcherType.ERROR).permitAll()
+                    .requestMatchers(org.springframework.boot.autoconfigure.security.servlet.PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                    .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/favicon.ico", "/auth/**", "/static/**").permitAll()
+                    .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                    .requestMatchers("/account/**").hasAuthority("USER")
+                    .anyRequest().authenticated())
                 .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authenticationProvider(authenticationProvider())

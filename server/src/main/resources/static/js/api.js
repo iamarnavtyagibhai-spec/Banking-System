@@ -2,6 +2,8 @@
    NOVA BANK - CENTRALIZED API CLIENT
    ========================================================================== */
 
+let autoLogoutTimer = null;
+
 const API_CONFIG = {
   // Live Render Backend by default, with Localhost fallback
   DEFAULT_BASE_URL: 'https://banking-system-8kev.onrender.com',
@@ -26,12 +28,14 @@ const API_CONFIG = {
 
   setToken(token) {
     localStorage.setItem('nova_jwt_token', token);
+    this.scheduleAutoLogout();
   },
 
   clearToken() {
     localStorage.removeItem('nova_jwt_token');
     localStorage.removeItem('nova_user_email');
     localStorage.removeItem('nova_user_role');
+    this.cancelAutoLogout();
   },
 
   setUser(email, role = 'USER') {
@@ -46,21 +50,80 @@ const API_CONFIG = {
     };
   },
 
+  getJwtPayload() {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  },
+
+  getTokenExpiryMs() {
+    const payload = this.getJwtPayload();
+    if (payload && payload.exp) {
+      return payload.exp * 1000;
+    }
+    return null;
+  },
+
+  isTokenExpired() {
+    const expiryMs = this.getTokenExpiryMs();
+    if (!expiryMs) return false;
+    return Date.now() >= expiryMs;
+  },
+
   isAuthenticated() {
     const token = this.getToken();
     if (!token) return false;
-    try {
-      const parts = token.split('.');
-      if (parts.length === 3) {
-        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-        if (payload.exp && (payload.exp * 1000) < Date.now()) {
-          this.clearToken();
-          return false;
-        }
+    if (this.isTokenExpired()) {
+      this.clearToken();
+      return false;
+    }
+    return true;
+  },
+
+  scheduleAutoLogout() {
+    this.cancelAutoLogout();
+    const expiryMs = this.getTokenExpiryMs();
+    if (!expiryMs) return;
+
+    const remainingMs = expiryMs - Date.now();
+    if (remainingMs <= 0) {
+      if (typeof handleAutoLogout === 'function') {
+        handleAutoLogout('Session expired. Please sign in again.');
+      } else {
+        this.clearToken();
+        window.location.hash = '#login';
       }
-      return true;
-    } catch (e) {
-      return !!token;
+      return;
+    }
+
+    // Schedule exact auto-logout callback when JWT expires
+    autoLogoutTimer = setTimeout(() => {
+      if (typeof handleAutoLogout === 'function') {
+        handleAutoLogout('Your session has expired. You have been logged out.');
+      } else {
+        API_CONFIG.clearToken();
+        window.location.hash = '#login';
+      }
+    }, remainingMs);
+  },
+
+  cancelAutoLogout() {
+    if (autoLogoutTimer) {
+      clearTimeout(autoLogoutTimer);
+      autoLogoutTimer = null;
     }
   }
 };
@@ -101,8 +164,12 @@ async function apiRequest(endpoint, options = {}) {
       // Handle Rate Limiting (429) & Auth (401/403)
       if (response.status === 401 || response.status === 403) {
         if (!endpoint.startsWith('/auth/')) {
-          API_CONFIG.clearToken();
-          window.location.hash = '#login';
+          if (typeof handleAutoLogout === 'function') {
+            handleAutoLogout('Session expired or unauthorized. Please sign in again.');
+          } else {
+            API_CONFIG.clearToken();
+            window.location.hash = '#login';
+          }
           throw new Error('Session expired. Please login again.');
         }
       }

@@ -8,6 +8,21 @@ const AppRouter = {
   init() {
     window.addEventListener('hashchange', () => this.route());
     this.route();
+
+    // Start auto-logout timer if already logged in with active token
+    if (API_CONFIG.isAuthenticated()) {
+      API_CONFIG.scheduleAutoLogout();
+    }
+
+    // Heartbeat check every 5 seconds: auto logout if token expired while on dashboard
+    setInterval(() => {
+      if (window.location.hash === '#dashboard') {
+        if (!API_CONFIG.isAuthenticated() || API_CONFIG.isTokenExpired()) {
+          handleAutoLogout('Your session has expired. Please sign in again.');
+        }
+      }
+    }, 5000);
+
     this.checkApiStatus();
     setInterval(() => this.checkApiStatus(), 30000); // Check API health every 30s
   },
@@ -70,7 +85,7 @@ const AppRouter = {
 };
 
 /**
- * Handle Logout
+ * Handle Manual Logout
  */
 function handleLogout() {
   API_CONFIG.clearToken();
@@ -82,7 +97,23 @@ function handleLogout() {
   AppRouter.route();
 }
 
+/**
+ * Handle Automatic Session Expiration Logout
+ */
+function handleAutoLogout(reason = 'Your session has expired. Please sign in again.') {
+  API_CONFIG.clearToken();
+  if (typeof currentAccountData !== 'undefined') currentAccountData = null;
+  if (typeof allTransactions !== 'undefined') allTransactions = [];
+  if (typeof closeAllModals === 'function') closeAllModals();
+  showToast(reason, 'warning');
+  window.location.hash = '#login';
+  if (typeof AppRouter !== 'undefined' && AppRouter.route) {
+    AppRouter.route();
+  }
+}
+
 window.handleLogout = handleLogout;
+window.handleAutoLogout = handleAutoLogout;
 window.AppRouter = AppRouter;
 
 /**

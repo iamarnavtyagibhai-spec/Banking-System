@@ -13,6 +13,7 @@ const AppRouter = {
   },
 
   route() {
+    if (typeof closeAllModals === 'function') closeAllModals();
     let hash = window.location.hash || '#login';
     const isAuth = API_CONFIG.isAuthenticated();
 
@@ -35,14 +36,17 @@ const AppRouter = {
     // Show appropriate view
     const navUserArea = document.getElementById('nav-user-area');
     if (hash === '#signup') {
-      document.getElementById('signup-view').style.display = 'block';
+      const signupEl = document.getElementById('signup-view');
+      if (signupEl) signupEl.style.display = 'block';
       if (navUserArea) navUserArea.style.display = 'none';
     } else if (hash === '#dashboard') {
-      document.getElementById('dashboard-view').style.display = 'block';
+      const dashEl = document.getElementById('dashboard-view');
+      if (dashEl) dashEl.style.display = 'block';
       if (navUserArea) navUserArea.style.display = 'flex';
       loadDashboard();
     } else {
-      document.getElementById('login-view').style.display = 'block';
+      const loginEl = document.getElementById('login-view');
+      if (loginEl) loginEl.style.display = 'block';
       if (navUserArea) navUserArea.style.display = 'none';
     }
   },
@@ -72,10 +76,14 @@ function handleLogout() {
   API_CONFIG.clearToken();
   if (typeof currentAccountData !== 'undefined') currentAccountData = null;
   if (typeof allTransactions !== 'undefined') allTransactions = [];
+  if (typeof closeAllModals === 'function') closeAllModals();
   showToast('Logged out successfully', 'info');
   window.location.hash = '#login';
   AppRouter.route();
 }
+
+window.handleLogout = handleLogout;
+window.AppRouter = AppRouter;
 
 /**
  * Open API Settings Switcher Modal

@@ -321,6 +321,12 @@ function closeModal(id) {
   if (modal) modal.classList.remove('active');
 }
 
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.classList.remove('active');
+  });
+}
+
 function togglePassword(inputId, btn) {
   const input = document.getElementById(inputId);
   if (input.type === 'password') {
@@ -331,3 +337,16 @@ function togglePassword(inputId, btn) {
     btn.innerText = '👁️';
   }
 }
+
+// Global dismiss listeners for modals
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('active');
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeAllModals();
+  }
+});

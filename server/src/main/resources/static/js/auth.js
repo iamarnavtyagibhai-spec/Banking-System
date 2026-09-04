@@ -10,12 +10,18 @@ let resendTimerInterval = null;
  * Toast Notification Helper
  */
 function showToast(message, type = 'info') {
+  let text = message;
+  if (typeof text === 'object' && text !== null) {
+    text = text.message || text.error || JSON.stringify(text);
+  }
+  text = String(text || 'An error occurred');
+
   const container = document.getElementById('toast-container') || createToastContainer();
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   
   const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
-  toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+  toast.innerHTML = `<span>${icon}</span> <span>${text}</span>`;
   
   container.appendChild(toast);
   setTimeout(() => {

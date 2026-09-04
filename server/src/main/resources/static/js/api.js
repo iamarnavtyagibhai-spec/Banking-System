@@ -93,10 +93,48 @@ async function apiRequest(endpoint, options = {}) {
         }
       }
 
-      let errorMsg = typeof data === 'object' && data.message ? data.message : data;
-      if (typeof errorMsg === 'string' && errorMsg.includes('Exception:')) {
-        errorMsg = errorMsg.split('Exception:')[1].trim();
+      let errorMsg = 'An error occurred';
+
+      if (typeof data === 'string' && data.trim()) {
+        errorMsg = data.trim();
+      } else if (typeof data === 'object' && data !== null) {
+        if (typeof data.message === 'string' && data.message.trim()) {
+          errorMsg = data.message.trim();
+        } else if (typeof data.error === 'string' && data.error.trim()) {
+          errorMsg = data.error.trim();
+        } else if (Array.isArray(data.errors)) {
+          errorMsg = data.errors
+            .map(e => (typeof e === 'object' ? (e.defaultMessage || e.message || JSON.stringify(e)) : e))
+            .join(', ');
+        } else if (typeof data.errors === 'object' && data.errors !== null) {
+          errorMsg = Object.values(data.errors).join(', ');
+        } else {
+          const values = Object.values(data).filter(v => typeof v === 'string' && v.trim());
+          if (values.length > 0) {
+            errorMsg = values.join(', ');
+          } else {
+            try {
+              errorMsg = JSON.stringify(data);
+            } catch (e) {
+              errorMsg = `Request failed with status ${response.status}`;
+            }
+          }
+        }
       }
+
+      if (typeof errorMsg === 'string') {
+        if (errorMsg.includes('Exception:')) {
+          errorMsg = errorMsg.split('Exception:')[1].trim();
+        }
+        if (errorMsg.startsWith('{') && errorMsg.endsWith('}')) {
+          try {
+            const parsed = JSON.parse(errorMsg);
+            if (parsed.message) errorMsg = parsed.message;
+            else if (parsed.error) errorMsg = parsed.error;
+          } catch(e) {}
+        }
+      }
+
       throw new Error(errorMsg || `Request failed with status ${response.status}`);
     }
 

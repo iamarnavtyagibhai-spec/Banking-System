@@ -47,7 +47,21 @@ const API_CONFIG = {
   },
 
   isAuthenticated() {
-    return !!this.getToken();
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+        if (payload.exp && (payload.exp * 1000) < Date.now()) {
+          this.clearToken();
+          return false;
+        }
+      }
+      return true;
+    } catch (e) {
+      return !!token;
+    }
   }
 };
 

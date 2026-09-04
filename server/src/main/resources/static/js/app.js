@@ -70,6 +70,8 @@ const AppRouter = {
  */
 function handleLogout() {
   API_CONFIG.clearToken();
+  if (typeof currentAccountData !== 'undefined') currentAccountData = null;
+  if (typeof allTransactions !== 'undefined') allTransactions = [];
   showToast('Logged out successfully', 'info');
   window.location.hash = '#login';
   AppRouter.route();

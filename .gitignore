@@ -2,6 +2,8 @@ HELP.md
 target/
 *.log
 .env
+kafka/
+*.tgz
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

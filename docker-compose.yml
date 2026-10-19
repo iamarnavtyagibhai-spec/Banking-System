@@ -2,25 +2,62 @@ version: '3.8'
 
 services:
   # ----------------------------------------------------
-  # Spring Boot Banking System Application
+  # 1. User Service (Authentication & Profile)
   # ----------------------------------------------------
-  banking-app:
+  user-service:
     build:
-      context: ./server
+      context: ./ninjabank-user-service
       dockerfile: Dockerfile
-    container_name: banking_system_backend
+    container_name: ninjabank-user-service
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
-      # Cloud Neon PostgreSQL Configuration
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL:-jdbc:postgresql://localhost:5432/neondb}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-postgres}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD:-postgres}
-      
-      # JWT Authentication Secrets
-      - JWT_SECRET=${JWT_SECRET:-YOUR_JWT_SECRET_KEY_MIN_32_CHARS_LONG}
-      - JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
-      
-      # Brevo (Sendinblue) Transactional Email API Key
-      - BREVO_API_KEY=${BREVO_API_KEY:-YOUR_BREVO_API_KEY}
+      - SERVER_PORT=8081
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-solitary-cell-atcu9hsq.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - SPRING_DATASOURCE_USERNAME=neondb_owner
+      - SPRING_DATASOURCE_PASSWORD=npg_jxT49qJcKYVz
+      - JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      - JWT_EXPIRATION=86400000
+      - BREVO_API_KEY=${BREVO_API_KEY}
+      - BREVO_SENDER_EMAIL=iamarnavtyagibhai@11798839.brevosend.com
+      - BREVO_SENDER_NAME=NinjaBank
+    restart: unless-stopped
+
+  # ----------------------------------------------------
+  # 2. Account Service (Balance & Account Management)
+  # ----------------------------------------------------
+  account-service:
+    build:
+      context: ./Accountservice
+      dockerfile: Dockerfile
+    container_name: ninjabank-account-service
+    ports:
+      - "8083:8083"
+    environment:
+      - PORT=8083
+      - DB_URL=jdbc:postgresql://ep-royal-dew-b4rst5e7-pooler.c-6.us-east-2.aws.neon.tech:5432/neondb?sslmode=require
+      - DB_USERNAME=neondb_owner
+      - DB_PASSWORD=npg_b0BSayizAH3m
+      - JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    restart: unless-stopped
+
+  # ----------------------------------------------------
+  # 3. Transaction Service (Deposit, Withdraw, Transfer)
+  # ----------------------------------------------------
+  transaction-service:
+    build:
+      context: ./ninjabank-transaction-service
+      dockerfile: Dockerfile
+    container_name: ninjabank-transaction-service
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - DB_URL=jdbc:postgresql://ep-muddy-cake-b8r1c1bw-pooler.c-14.us-east-1.aws.neon.tech:5432/neondb?sslmode=require
+      - DB_USERNAME=neondb_owner
+      - DB_PASSWORD=npg_SHsbCGN6Z9iR
+      - ACCOUNT_SERVICE_URL=http://account-service:8083
+      - JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    depends_on:
+      - account-service
     restart: unless-stopped

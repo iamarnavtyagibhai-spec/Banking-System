@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NinjaBank 🥷 - Autonomous Shinobi Banking & Risk Sentinel</title>
+  <meta name="description" content="Next-generation stealth core banking platform featuring double-entry ledger, deterministic AI risk engine, and microservices architecture.">
+  <link rel="stylesheet" href="./css/ninja.css?v=5.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥷</text></svg>">
+</head>
+<body>
+
+  <!-- ========================================================================= -->
+  <!-- TOP STICKY SHINOBI NAVBAR                                                 -->
+  <!-- ========================================================================= -->
+  <header class="ninja-navbar" id="main-ninja-navbar">
+    
+    <!-- Brand / Dojo Crest -->
+    <a href="#dashboard" class="brand-section" id="brand-home-link">
+      <div class="ninja-shuriken-badge">
+        <svg class="shuriken-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 0 L58 42 L100 50 L58 58 L50 100 L42 58 L0 50 L42 42 Z" fill="url(#shurikenGrad)"/>
+          <circle cx="50" cy="50" r="10" fill="#05070d" stroke="#00f0ff" stroke-width="3"/>
+          <defs>
+            <linearGradient id="shurikenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff"/>
+              <stop offset="50%" stop-color="#00ff9d"/>
+              <stop offset="100%" stop-color="#ff2a5f"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>NinjaBank <span class="kanji-mark">影</span></h1>
+        <div class="brand-motto">Silent • Swift • Secure</div>
+      </div>
+    </a>
+
+    <!-- Microservices Topology Cluster Beacons -->
+    <div class="cluster-topology-pills" id="cluster-topology-nodes">
+      <div class="node-pill" id="pill-user-service" title="User Service (Port 8081 / Neon Auth)">
+        <span class="status-beacon" id="beacon-user"></span>
+        <span>User</span>
+        <span class="font-mono text-xs" id="lat-user" style="opacity: 0.7;">1ms</span>
+      </div>
+      <div class="node-pill" id="pill-account-service" title="Account Service (Port 8083 / Core Ledger)">
+        <span class="status-beacon" id="beacon-account"></span>
+        <span>Account</span>
+        <span class="font-mono text-xs" id="lat-account" style="opacity: 0.7;">1ms</span>
+      </div>
+      <div class="node-pill" id="pill-txn-service" title="Transaction Service (Port 8082 / Risk Engine)">
+        <span class="status-beacon" id="beacon-txn"></span>
+        <span>Transaction</span>
+        <span class="font-mono text-xs" id="lat-txn" style="opacity: 0.7;">1ms</span>
+      </div>
+    </div>
+
+    <!-- Nav Controls (Sound FX, Stealth Mode, Gateway Switcher, User Badge) -->
+    <div class="nav-actions">
+      
+      <!-- Audio Toggle -->
+      <button class="btn-icon-ninja" id="btn-toggle-sound" title="Toggle Shinobi Audio FX">
+        <span id="sound-icon">🔊</span>
+      </button>
+
+      <!-- Stealth Cloak Toggle -->
+      <button class="btn-icon-ninja" id="btn-toggle-stealth" title="Toggle Shadow Cloak (Hide/Show Balances)">
+        <span>🥷</span>
+      </button>
+
+      <!-- Gateway Selector -->
+      <button class="gateway-chip" id="btn-gateway-selector" title="Switch Service Realms (Local / Cloud / Dojo)">
+        <span id="gateway-current-label">⚡ Stealth Dojo (Offline)</span>
+        <span style="font-size: 0.68rem;">⚙️</span>
+      </button>
+
+      <!-- User Dojo Pill -->
+      <div class="user-dojo-badge" id="user-header-pill">
+        <div class="user-avatar-circle">忍</div>
+        <div class="user-dojo-info">
+          <span class="user-dojo-name" id="header-user-email">arnavtyagi96@gmail.com</span>
+          <span class="user-dojo-rank" id="header-user-rank">Kage (Grandmaster)</span>
+        </div>
+      </div>
+
+      <!-- Sign Out -->
+      <button class="btn-ninja btn-ninja-ghost btn-xs" id="btn-logout" title="Exit Dojo Session">
+        Exit
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- SCREEN 1: SHINOBI AUTHENTICATION SHRINE (USER SERVICE)                    -->
+  <!-- ========================================================================= -->
+  <main class="auth-viewport" id="auth-viewport" style="display: none;">
+    <div class="auth-shrine">
+      
+      <!-- Header Banner -->
+      <div class="auth-banner-header">
+        <div class="auth-emblem">🥷</div>
+        <h2>Enter the Ninja Dojo</h2>
+        <p>Zero-Knowledge Ledger & AI Risk Sentinel Authentication</p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="auth-tabs-bar">
+        <button type="button" class="auth-tab-item active" id="tab-auth-signin">Sign In</button>
+        <button type="button" class="auth-tab-item" id="tab-auth-signup">Join Clan (Register)</button>
+      </div>
+
+      <!-- FORM 1: SIGN IN -->
+      <form id="form-ninja-signin" class="auth-form-panel active">
+        <div class="form-group">
+          <label class="form-label" for="signin-email">Shinobi Email Address</label>
+          <div class="input-icon-ninja">
+            <span class="input-icon-glyph">✉</span>
+            <input type="email" id="signin-email" class="form-control-ninja" value="arnavtyagi96@gmail.com" placeholder="name@domain.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signin-password">Secret Password</label>
+          <div class="input-icon-ninja">
+            <span class="input-icon-glyph">🔑</span>
+            <input type="password" id="signin-password" class="form-control-ninja" value="Banking@1234" placeholder="Enter password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-ninja btn-ninja-primary w-100" id="btn-signin-submit">
+          ⚔️ Enter Ninja Dojo
+        </button>
+
+        <div class="auth-divider-line">
+          <span>OR INSTANT ENTRY</span>
+        </div>
+
+        <button type="button" class="btn-ninja btn-ninja-emerald w-100" id="btn-dojo-visitor-pass">
+          ⚡ 1-Click Shinobi Master Pass (Demo)
+        </button>
+      </form>
+
+      <!-- FORM 2: SIGN UP -->
+      <form id="form-ninja-signup" class="auth-form-panel">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label" for="signup-firstname">First Name</label>
+            <input type="text" id="signup-firstname" class="form-control-ninja" value="Arnav" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signup-lastname">Last Name</label>
+            <input type="text" id="signup-lastname" class="form-control-ninja" value="Tyagi" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Email (Brevo OTP Verification)</label>
+          <input type="email" id="signup-email" class="form-control-ninja" value="arnavtyagi96@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Master Password</label>
+          <input type="password" id="signup-password" class="form-control-ninja" placeholder="Create strong passphrase" required>
+        </div>
+
+        <button type="submit" class="btn-ninja btn-ninja-primary w-100" id="btn-signup-submit">
+          📜 Register & Dispatch OTP
+        </button>
+      </form>
+
+      <!-- FORM 3: OTP VERIFICATION -->
+      <form id="form-ninja-otp" class="auth-form-panel">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Enter 6-digit verification code sent to:</div>
+          <strong id="otp-display-email" style="color: var(--chakra-cyan); font-family: var(--font-mono);">user@domain.com</strong>
+        </div>
+
+        <div class="form-group">
+          <input type="text" id="otp-input-field" class="form-control-ninja font-mono" maxlength="6" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.3em; font-weight: 800;" placeholder="123456" required>
+        </div>
+
+        <button type="submit" class="btn-ninja btn-ninja-emerald w-100">
+          ✅ Verify & Activate Vault
+        </button>
+      </form>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- SCREEN 2: SHINOBI BANKING DASHBOARD                                       -->
+  <!-- ========================================================================= -->
+  <div class="dojo-dashboard-wrapper" id="dashboard-viewport" style="display: none;">
+    
+    <!-- Hero Banner -->
+    <div class="dashboard-hero-header">
+      <div class="hero-welcome">
+        <h2>Grandmaster Chamber & Vaults <span style="font-size: 1.3rem;">🏯</span></h2>
+        <p>Decentralized core banking ledger with real-time shadow risk mitigation.</p>
+      </div>
+      <div class="ninja-status-indicator">
+        <div class="rank-pill">
+          <span>⚔️</span>
+          <span>RANK: SHINOBI KAGE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="dojo-grid-layout">
+      
+      <!-- ================= LEFT COLUMN: CARD & TRANSFER ================= -->
+      <div class="dojo-col-left">
+
+        <!-- 1. HOLOGRAPHIC 3D FLIP NINJA BLACK CARD -->
+        <div class="ninja-glass-card">
+          <div class="card-top-bar">
+            <div class="card-title-combo">
+              <h3>💳 Shinobi Black Card</h3>
+              <span class="tag-service-badge account" id="card-status-tag">ACTIVE</span>
+            </div>
+            <button class="btn-ninja btn-ninja-ghost btn-xs" id="btn-flip-card" title="Flip card to inspect CVV & stripe">
+              🔄 Flip Card
+            </button>
+          </div>
+
+          <!-- 3D Card Flipper -->
+          <div class="card-flipper-container">
+            <div class="ninja-black-card" id="ninja-black-card" title="Click anywhere on card to flip!">
+              
+              <!-- Card Front -->
+              <div class="card-face card-front">
+                <div class="card-header-row">
+                  <div class="emv-gold-chip"></div>
+                  <div class="card-brand-tag">
+                    <span>NINJA BANK</span>
+                    <span style="font-size: 1.1rem;">🥷</span>
+                  </div>
+                </div>
+
+                <div class="card-balance-section">
+                  <div class="card-balance-lbl">
+                    <span>CHAKRA RESERVES (BALANCE)</span>
+                    <span style="cursor: pointer;" onclick="toggleStealthMode()" title="Toggle visibility">👁</span>
+                  </div>
+                  <div class="card-balance-amount" id="card-balance-display">₹1,50,000.00</div>
+                </div>
+
+                <div class="card-footer-info">
+                  <div>
+                    <div class="card-num-masked" id="card-masked-digits">4532 •••• •••• 1001</div>
+                    <div class="card-owner-name" id="card-holder-name">Arnav Tyagi</div>
+                  </div>
+                  <div class="card-expiry-box">
+                    <div style="font-size: 0.65rem; color: var(--text-stealth);">EXP</div>
+                    <div class="card-expiry-val">09/32</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Back -->
+              <div class="card-face card-back">
+                <div class="magnetic-strip"></div>
+                <div class="back-content-inner">
+                  <div class="signature-cvv-row">
+                    <div class="signature-strip">Arnav Tyagi</div>
+                    <div class="cvv-box" id="card-cvv-display">907</div>
+                  </div>
+                  <div class="back-disclaimer">
+                    This card is issued by NinjaBank Autonomous Ledger. Unauthorized usage will trigger immediate Jutsu security locks.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Quick Jutsu Buttons Row -->
+          <div class="jutsu-actions-row">
+            <div class="jutsu-btn" id="jutsu-btn-deposit" title="Deposit funds into vault">
+              <span class="jutsu-glyph">🪙</span>
+              <span class="jutsu-label">Summon Gold</span>
+            </div>
+            <div class="jutsu-btn" id="jutsu-btn-transfer" title="Send money to another account">
+              <span class="jutsu-glyph">⚔️</span>
+              <span class="jutsu-label">Shadow Send</span>
+            </div>
+            <div class="jutsu-btn" id="jutsu-btn-lock" title="Freeze or unlock card">
+              <span class="jutsu-glyph">🔒</span>
+              <span class="jutsu-label">Stealth Lock</span>
+            </div>
+            <div class="jutsu-btn" id="jutsu-btn-scroll" title="Scroll down to transaction history">
+              <span class="jutsu-glyph">📜</span>
+              <span class="jutsu-label">Secret Scroll</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SHADOW TRANSFER (SHURIKEN SEND) WITH LIVE RISK RADAR -->
+        <div class="ninja-glass-card">
+          <div class="card-top-bar">
+            <div class="card-title-combo">
+              <h3>⚔️ Shadow Transfer</h3>
+              <span class="tag-service-badge txn">TransactionService</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+              Device: <span id="display-device-id" style="color: var(--chakra-cyan);">DEV-INIT</span>
+            </div>
+          </div>
+
+          <form id="ninja-transfer-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="txn-from-account">From Account (Source)</label>
+                <input type="text" id="txn-from-account" class="form-control-ninja font-mono" value="ACC-1001" required>
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="txn-to-account">Receiver Vault</label>
+                <input type="text" id="txn-to-account" class="form-control-ninja font-mono" value="ACC-2002" placeholder="e.g. ACC-2002" required>
+              </div>
+            </div>
+
+            <!-- Quick Beneficiary Chips -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;">
+              <span style="font-size: 0.72rem; color: var(--text-stealth); align-self: center;">Frequent:</span>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-receiver="ACC-2002">ACC-2002 (Shadow Clan)</button>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-receiver="ACC-9999">ACC-9999 (Rogue +35 Risk)</button>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-receiver="ACC-5555">ACC-5555 (Imperial)</button>
+            </div>
+
+            <!-- Amount Input -->
+            <div class="form-group">
+              <label class="form-label" for="txn-amount">Transfer Amount (₹ INR)</label>
+              <div class="input-icon-ninja">
+                <span class="input-icon-glyph">₹</span>
+                <input type="number" id="txn-amount" class="form-control-ninja font-mono font-bold text-lg" value="5000" min="1" step="any" required>
+              </div>
+            </div>
+
+            <!-- Amount Presets -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px;">
+              <span style="font-size: 0.72rem; color: var(--text-stealth); align-self: center;">Presets:</span>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-amount="500">+₹500</button>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-amount="2500">+₹2,500</button>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-amount="25000">+₹25,000</button>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-amount="75000">+₹75,000</button>
+              <button type="button" class="btn-ninja btn-ninja-ghost btn-xs" data-quick-amount="150000">+₹1,50,000</button>
+            </div>
+
+            <!-- DETERMINISTIC NINJA RISK RADAR & SENTINEL HUD -->
+            <div class="sentinel-hud-container">
+              <div class="hud-top-meta">
+                <div class="hud-radar-label">
+                  <div class="radar-sweep-icon"></div>
+                  <span>Shinobi Sentinel Radar</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div class="score-odometer">
+                    <span class="num" id="risk-score-num">18</span>
+                    <span class="denom">/100</span>
+                  </div>
+                  <span class="risk-level-tag low" id="risk-level-badge">LOW RISK</span>
+                </div>
+              </div>
+
+              <div class="gauge-track-ninja">
+                <div class="gauge-fill-ninja" id="risk-gauge-fill" style="width: 18%; background-color: var(--shuriken-green);"></div>
+              </div>
+
+              <div class="threshold-ticks-row">
+                <span>0-30: LOW (Instant)</span>
+                <span>31-80: MEDIUM (Confirm)</span>
+                <span>81-100: HIGH (Risk PIN)</span>
+              </div>
+
+              <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 10px;" id="risk-summary-text">
+                Chakra flow normal. Swift shadow transfer permitted immediately.
+              </div>
+
+              <div class="risk-factors-tray" id="risk-factors-tray">
+                <span class="factor-none-tag">✓ No critical risk anomalies detected</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-ninja btn-ninja-primary w-100" id="btn-execute-transfer" style="margin-top: 18px; padding: 13px;">
+              ⚔️ Execute Shadow Transfer
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- ================= RIGHT COLUMN: SCROLL & SENTINEL PROFILE ================= -->
+      <div class="dojo-col-right">
+
+        <!-- 3. SCROLL OF SECRETS: TRANSACTION LEDGER -->
+        <div class="ninja-glass-card">
+          <div class="card-top-bar">
+            <div class="card-title-combo">
+              <h3>📜 Scroll of Secrets</h3>
+              <span class="tag-service-badge account" id="passbook-count-badge">2 Records</span>
+            </div>
+            <div class="scroll-header-actions">
+              <div class="search-ninja-box">
+                <span class="search-glyph">🔍</span>
+                <input type="text" id="passbook-search-input" class="form-control-ninja" placeholder="Filter ledger...">
+              </div>
+              <button class="btn-ninja btn-ninja-ghost btn-xs" id="btn-clear-history" title="Clear local passbook history">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="passbook-scroll-wrapper">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>ID / Time</th>
+                  <th>Type</th>
+                  <th>Route</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="passbook-tbody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. SHINOBI DEFENSE MATRIX & ANOMALY RADAR -->
+        <div class="ninja-glass-card">
+          <div class="card-top-bar">
+            <div class="card-title-combo">
+              <h3>🛡️ Shinobi Defense Matrix</h3>
+              <span class="tag-service-badge risk">AI Sentinel</span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+            <div style="background: rgba(5, 7, 13, 0.6); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-size: 0.7rem; color: var(--text-stealth);">SECURITY STATUS</div>
+              <div style="font-size: 0.92rem; font-weight: 800; color: var(--shuriken-green); margin-top: 4px;">UNCOMPROMISED</div>
+            </div>
+            <div style="background: rgba(5, 7, 13, 0.6); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <div style="font-size: 0.7rem; color: var(--text-stealth);">RISK PIN PROTECTION</div>
+              <div style="font-size: 0.92rem; font-weight: 800; color: var(--chakra-cyan); margin-top: 4px;">BCRYPT ARMORED</div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">
+            Deterministic risk engine models device telemetry, velocity spikes, midnight transfers, and account histories. High risk transactions trigger mandatory secondary PIN verification.
+          </div>
+
+          <button class="btn-ninja btn-ninja-ghost btn-sm w-100" onclick="showNinjaToast('🔑 Shinobi Risk PIN is primed with BCrypt hashing', 'success')">
+            ⚙️ Configure Secondary Shinobi PIN
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS SYSTEM                                                             -->
+  <!-- ========================================================================= -->
+
+  <!-- MODAL 1: MEDIUM RISK CONFIRMATION -->
+  <div class="modal-veil" id="modal-confirm-medium">
+    <div class="modal-scroll-box">
+      <button class="modal-close-cross">×</button>
+      <div style="font-size: 2.2rem; text-align: center; margin-bottom: 8px;">⚠️</div>
+      <h3 style="text-align: center; font-size: 1.3rem; margin-bottom: 8px;">Medium Risk Confirmation</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 14px;">
+        Risk score exceeded standard threshold (31-80). Please explicitly verify your intention before funds leave your vault.
+      </p>
+      <div id="modal-medium-factors-txt" style="background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.35); padding: 10px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--kage-gold); margin-bottom: 18px;">
+        Triggered Factors: LARGE_TRANSFER
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-ninja btn-ninja-ghost w-100" id="btn-medium-cancel">Abort</button>
+        <button class="btn-ninja btn-ninja-primary w-100" id="btn-medium-confirm">Authorize Transfer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: HIGH RISK PASSWORD CHALLENGE -->
+  <div class="modal-veil" id="modal-high-risk-pwd">
+    <div class="modal-scroll-box danger-border">
+      <button class="modal-close-cross">×</button>
+      <div style="font-size: 2.2rem; text-align: center; margin-bottom: 8px;">🚨</div>
+      <h3 style="text-align: center; font-size: 1.3rem; color: var(--katana-crimson); margin-bottom: 8px;">High-Risk Gate Activated</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 16px;">
+        Risk score &gt; 80! Due to significant amount or flagged rogue recipient, enter your secondary Shinobi Risk PIN to authorize.
+      </p>
+      <div class="form-group">
+        <label class="form-label">Secondary Shinobi PIN / Passphrase</label>
+        <input type="password" id="input-risk-pwd-prompt" class="form-control-ninja" placeholder="Enter PIN (e.g. ninja123)">
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 14px;">
+        <button class="btn-ninja btn-ninja-ghost w-100" id="btn-high-cancel">Cancel</button>
+        <button class="btn-ninja btn-ninja-crimson w-100" id="btn-high-submit">Verify &amp; Disburse</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: TREASURY GOLD DEPOSIT -->
+  <div class="modal-veil" id="modal-treasury-deposit">
+    <div class="modal-scroll-box">
+      <button class="modal-close-cross">×</button>
+      <div style="font-size: 2.2rem; text-align: center; margin-bottom: 8px;">🪙</div>
+      <h3 style="text-align: center; font-size: 1.3rem; margin-bottom: 8px;">Summon Treasury Gold</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 16px;">
+        Deposit funds into your primary Shinobi Vault (calls AccountService <code>/accounts/{acc}/deposit</code>).
+      </p>
+      <div class="form-group">
+        <label class="form-label">Deposit Amount (₹ INR)</label>
+        <input type="number" id="input-deposit-amount" class="form-control-ninja font-mono font-bold" value="25000" min="1" step="any">
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 18px;">
+        <button class="btn-ninja btn-ninja-ghost w-100" id="btn-deposit-cancel">Cancel</button>
+        <button class="btn-ninja btn-ninja-emerald w-100" id="btn-deposit-confirm">Deposit Funds</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: REALM GATEWAY SELECTOR -->
+  <div class="modal-veil" id="modal-realm-gateway">
+    <div class="modal-scroll-box">
+      <button class="modal-close-cross">×</button>
+      <h3 style="font-size: 1.25rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <span>⛩️</span> Shinobi Realm Switcher
+      </h3>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+        Select your microservice communication layer:
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
+        <button class="jutsu-btn" style="flex-direction: row; justify-content: flex-start; text-align: left; padding: 14px;" data-set-realm="LOCAL">
+          <span style="font-size: 1.6rem; margin-right: 12px;">🖥️</span>
+          <div>
+            <div style="font-weight: 700; color: var(--text-pure);">Localhost Microservices</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">User: 8081 • Txn: 8082 • Account: 8083</div>
+          </div>
+        </button>
+
+        <button class="jutsu-btn" style="flex-direction: row; justify-content: flex-start; text-align: left; padding: 14px;" data-set-realm="CLOUD">
+          <span style="font-size: 1.6rem; margin-right: 12px;">☁️</span>
+          <div>
+            <div style="font-weight: 700; color: var(--text-pure);">Render Cloud Realm</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">userservice-bank.onrender.com endpoints</div>
+          </div>
+        </button>
+
+        <button class="jutsu-btn" style="flex-direction: row; justify-content: flex-start; text-align: left; padding: 14px;" data-set-realm="DOJO">
+          <span style="font-size: 1.6rem; margin-right: 12px;">⚡</span>
+          <div>
+            <div style="font-weight: 700; color: var(--chakra-cyan);">Stealth Dojo Simulator (Instant Offline)</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);">Fully resilient, zero network lag, real localStorage state</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: TRANSFER SUCCESS RECEIPT -->
+  <div class="modal-veil" id="modal-transfer-success">
+    <div class="modal-scroll-box" style="text-align: center;">
+      <div class="shuriken-success-ring">
+        <span>⚡</span>
+      </div>
+      <h3 style="font-size: 1.4rem; font-weight: 800; color: var(--text-pure); margin-bottom: 4px;">Shadow Transfer Completed!</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+        Double-entry ledger entry stamped into the secret scroll.
+      </p>
+
+      <div style="background: rgba(5, 7, 13, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 18px; text-align: left;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">TRANSACTION ID</span>
+          <strong id="receipt-txn-id" style="font-family: var(--font-mono); color: var(--chakra-cyan);">TXN-902184</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">AMOUNT TRANSFERRED</span>
+          <strong id="receipt-amount" style="font-family: var(--font-cyber); font-size: 1.15rem; color: var(--shuriken-green);">₹5,000.00</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">RECIPIENT VAULT</span>
+          <strong id="receipt-receiver" style="font-family: var(--font-mono); color: var(--text-pure);">ACC-2002</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">TIME</span>
+          <span id="receipt-time" style="font-size: 0.75rem; color: var(--text-stealth);">Just now</span>
+        </div>
+      </div>
+
+      <button class="btn-ninja btn-ninja-primary w-100" id="btn-success-done" style="padding: 12px;">
+        ⚔️ Return to Dojo
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Tray -->
+  <div id="toast-tray"></div>
+
+  <!-- ========================================================================= -->
+  <!-- SCRIPTS                                                                   -->
+  <!-- ========================================================================= -->
+  <script src="./js/ninja-audio.js?v=5.0"></script>
+  <script src="./js/app.js?v=5.0"></script>
+</body>
+</html>

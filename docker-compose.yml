@@ -13,9 +13,9 @@ services:
       - "8081:8081"
     environment:
       - SERVER_PORT=8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-solitary-cell-atcu9hsq.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-twilight-mud-b5vwhdsv-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       - SPRING_DATASOURCE_USERNAME=neondb_owner
-      - SPRING_DATASOURCE_PASSWORD=npg_jxT49qJcKYVz
+      - SPRING_DATASOURCE_PASSWORD=npg_mFlHLyC40bVz
       - JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       - JWT_EXPIRATION=86400000
       - BREVO_API_KEY=${BREVO_API_KEY}

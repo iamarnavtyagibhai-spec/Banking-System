@@ -1,23 +1,20 @@
 package com.ninjabank.userservice.service;
 
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class OtpService {
 
-    private final SecureRandom random = new SecureRandom();
+    private final Map<String, String> forgotPasswordOtps = new ConcurrentHashMap<>();
 
-    public String generateOtp() {
-        return String.valueOf(100000 + random.nextInt(900000));
+    public void saveForgotPasswordOtp(String email, String otp) {
+        forgotPasswordOtps.put(email, otp);
     }
 
-    public boolean isOtpExpired(LocalDateTime otpExpiry) {
-        if (otpExpiry == null) {
-            return true;
-        }
-        return LocalDateTime.now().isAfter(otpExpiry);
+    public boolean verifyForgotPasswordOtp(String email, String otp) {
+        return otp != null && otp.equals(forgotPasswordOtps.get(email));
     }
 }

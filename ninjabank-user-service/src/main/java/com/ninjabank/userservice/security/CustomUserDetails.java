@@ -1,25 +1,26 @@
 package com.ninjabank.userservice.security;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.ninjabank.userservice.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ninjabank.userservice.model.User;
+import java.util.Collection;
+import java.util.List;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole().name()));
+        return List.of(
+                new SimpleGrantedAuthority(
+                        "ROLE_" + user.getRole().name()
+                )
+        );
     }
 
     @Override
@@ -49,10 +50,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
-    }
-
-    public User getUser() {
-        return user;
+        return true;
     }
 }

@@ -1,23 +1,18 @@
 package com.ninjabank.userservice.model;
 
+import com.ninjabank.userservice.enums.Role;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.ninjabank.userservice.model.enums.Role;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
-
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -28,7 +23,7 @@ public class User {
 
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -41,13 +36,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private LocalDateTime createdAt;
-
     private String otp;
 
     private LocalDateTime otpExpiry;
 
-    private boolean enabled;
+    @Column(nullable = false)
+    private boolean enabled = true;
+
+    private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
@@ -55,5 +51,18 @@ public class User {
 
     private LocalDateTime forgotPasswordOtpExpiry;
 
-    private boolean forgotPasswordOtpVerified;
+    @Column(nullable = false)
+    private boolean forgotPasswordOtpVerified = false;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        enabled = true;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
